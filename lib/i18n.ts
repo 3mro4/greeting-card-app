@@ -7,7 +7,7 @@ const translations = {
     'app.createCard': 'Create a Card',
 
     'steps.design.title': 'Design',
-    'steps.design.desc': 'Upload an image, write your message, and style the recipient name.',
+    'steps.design.desc': 'Upload an image, and style the recipient name.',
     'steps.share.title': 'Share',
     'steps.share.desc': 'Publish your card and get a unique link to share with anyone.',
     'steps.download.title': 'Download',
@@ -65,11 +65,11 @@ const translations = {
   },
   ar: {
     'app.title': 'مولد بطاقات التهنئة',
-    'app.description': 'أنشئ بطاقات تهنئة مخصصة وجميلة. ارفع صورة، أضف رسالتك، وشاركها مع أي شخص.',
+    'app.description': 'أنشئ بطاقات تهنئة مخصصة وجميلة. ارفع صورة، ونسّق اسم المستلم، وشاركها مع أي شخص.',
     'app.createCard': 'إنشاء بطاقة',
 
     'steps.design.title': 'تصميم',
-    'steps.design.desc': 'ارفع صورة، اكتب رسالتك، وصمّم اسم المستلم.',
+    'steps.design.desc': 'ارفع صورة، ونسّق اسم المستلم.',
     'steps.share.title': 'مشاركة',
     'steps.share.desc': 'انشر بطاقتك واحصل على رابط فريد لمشاركته مع أي شخص.',
     'steps.download.title': 'تحميل',
