@@ -121,6 +121,8 @@ export default function CardPage() {
         <CardPreview
           ref={previewRef}
           image={card.image}
+          imageWidth={card.imageWidth}
+          imageHeight={card.imageHeight}
           nameText={generated ? displayName : ''}
           namePosition={card.namePosition}
           fontFamily={card.fontFamily}

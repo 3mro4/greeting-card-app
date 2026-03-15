@@ -5,6 +5,8 @@ import { useLocale } from '@/lib/locale-context';
 
 interface CardPreviewProps {
   image: string;
+  imageWidth?: number;
+  imageHeight?: number;
   nameText: string;
   namePosition: { x: number; y: number };
   fontFamily: string;
@@ -19,6 +21,8 @@ const CardPreview = forwardRef<HTMLDivElement, CardPreviewProps>(
   (
     {
       image,
+      imageWidth,
+      imageHeight,
       nameText,
       namePosition,
       fontFamily,
@@ -31,6 +35,7 @@ const CardPreview = forwardRef<HTMLDivElement, CardPreviewProps>(
     ref
   ) => {
     const { t } = useLocale();
+    const aspectRatio = imageWidth && imageHeight ? `${imageWidth}/${imageHeight}` : '4/3';
 
     return (
       <div
@@ -39,12 +44,12 @@ const CardPreview = forwardRef<HTMLDivElement, CardPreviewProps>(
         className={`relative overflow-hidden rounded-xl shadow-lg bg-gray-900 ${
           interactive ? 'cursor-crosshair' : ''
         }`}
-        style={{ aspectRatio: '4/3' }}
+        style={{ aspectRatio }}
       >
         <img
           src={image}
           alt="Card background"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-contain"
           crossOrigin="anonymous"
         />
 

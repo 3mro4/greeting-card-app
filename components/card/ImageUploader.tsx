@@ -6,7 +6,7 @@ import { useLocale } from '@/lib/locale-context';
 
 interface ImageUploaderProps {
   image: string | null;
-  onImageChange: (dataUrl: string) => void;
+  onImageChange: (dataUrl: string, width: number, height: number) => void;
 }
 
 export default function ImageUploader({ image, onImageChange }: ImageUploaderProps) {
@@ -18,7 +18,12 @@ export default function ImageUploader({ image, onImageChange }: ImageUploaderPro
     const reader = new FileReader();
     reader.onload = (e) => {
       if (e.target?.result) {
-        onImageChange(e.target.result as string);
+        const dataUrl = e.target.result as string;
+        const img = new Image();
+        img.onload = () => {
+          onImageChange(dataUrl, img.naturalWidth, img.naturalHeight);
+        };
+        img.src = dataUrl;
       }
     };
     reader.readAsDataURL(file);

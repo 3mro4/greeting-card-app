@@ -1,6 +1,8 @@
 export interface CardData {
   cardId: string;
   image: string;
+  imageWidth?: number;
+  imageHeight?: number;
   namePosition: { x: number; y: number };
   fontFamily: string;
   fontSize: number;

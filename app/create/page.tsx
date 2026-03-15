@@ -15,6 +15,8 @@ import { saveCard, generateCardId, FONT_OPTIONS } from '@/lib/card-storage';
 export default function CreatePage() {
   const { t, dir } = useLocale();
   const [image, setImage] = useState<string | null>(null);
+  const [imageWidth, setImageWidth] = useState<number>(0);
+  const [imageHeight, setImageHeight] = useState<number>(0);
   const [namePosition, setNamePosition] = useState({ x: 50, y: 70 });
   const [fontFamily, setFontFamily] = useState('Inter');
   const [fontSize, setFontSize] = useState(32);
@@ -45,6 +47,8 @@ export default function CreatePage() {
     saveCard({
       cardId,
       image,
+      imageWidth,
+      imageHeight,
       namePosition,
       fontFamily,
       fontSize,
@@ -88,7 +92,11 @@ export default function CreatePage() {
           </div>
         )}
 
-        <ImageUploader image={image} onImageChange={setImage} />
+        <ImageUploader image={image} onImageChange={(dataUrl, w, h) => {
+          setImage(dataUrl);
+          setImageWidth(w);
+          setImageHeight(h);
+        }} />
 
         <div className="bg-white dark:bg-gray-800/60 rounded-2xl border border-gray-100 dark:border-gray-700/50 p-5 shadow-sm">
           <NameStyleControls
@@ -121,7 +129,9 @@ export default function CreatePage() {
             </h3>
             <CardPreview
               image={image}
-              nameText={isRtl ? t.create.placeholderName : t.create.placeholderName}
+              imageWidth={imageWidth}
+              imageHeight={imageHeight}
+              nameText={t.create.placeholderName}
               namePosition={namePosition}
               fontFamily={fontFamily}
               fontSize={fontSize}
