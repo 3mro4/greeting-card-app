@@ -24,6 +24,7 @@ export default function CardPage() {
   const [displayName, setDisplayName] = useState('');
 
   const previewRef = useRef<HTMLDivElement>(null);
+  const downloadRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const data = loadCard(cardId);
@@ -45,6 +46,12 @@ export default function CardPage() {
     setDisplayName(name.trim());
     setGenerated(true);
   }
+
+  useEffect(() => {
+    if (generated && downloadRef.current) {
+      downloadRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [generated, displayName]);
 
   if (notFound) {
     return (
@@ -132,7 +139,7 @@ export default function CardPage() {
         />
 
         {generated && (
-          <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <div ref={downloadRef} className="animate-in fade-in slide-in-from-bottom-2 duration-300">
             <DownloadButton
               targetRef={previewRef as React.RefObject<HTMLDivElement>}
               filename={`card-${displayName.replace(/\s+/g, '-').toLowerCase()}.png`}
