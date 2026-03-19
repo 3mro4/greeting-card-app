@@ -36,15 +36,18 @@ export default function CreatePage() {
     setNamePosition({ x: Math.round(x), y: Math.round(y) });
   }
 
-  function handlePublish() {
+  const [publishing, setPublishing] = useState(false);
+
+  async function handlePublish() {
     if (!image) {
       setError(t.create.uploadImageFirst);
       return;
     }
     setError(null);
+    setPublishing(true);
 
     const cardId = generateCardId();
-    saveCard({
+    const success = await saveCard({
       cardId,
       image,
       imageWidth,
@@ -58,6 +61,13 @@ export default function CreatePage() {
         ? { customFontData, customFontName }
         : {}),
     });
+
+    setPublishing(false);
+
+    if (!success) {
+      setError(t.create.publishFailed);
+      return;
+    }
 
     const link = `${window.location.origin}/card/${cardId}`;
     setPublishedLink(link);
@@ -146,13 +156,19 @@ export default function CreatePage() {
         {!publishedLink ? (
           <button
             onClick={handlePublish}
+            disabled={publishing}
             className="w-full flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700
               dark:bg-teal-500 dark:hover:bg-teal-600
+              disabled:bg-teal-400 dark:disabled:bg-teal-700
               text-white font-medium py-4 rounded-xl transition-all duration-200 text-sm
               shadow-sm hover:shadow-md"
           >
-            <Send className="w-4 h-4" />
-            {t.create.publishCard}
+            {publishing ? (
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <Send className="w-4 h-4" />
+            )}
+            {publishing ? t.create.publishing : t.create.publishCard}
           </button>
         ) : (
           <PublishLinkBox link={publishedLink} />

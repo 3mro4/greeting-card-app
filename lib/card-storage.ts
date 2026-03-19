@@ -1,3 +1,5 @@
+import { supabase } from './supabase';
+
 export interface CardData {
   cardId: string;
   image: string;
@@ -31,27 +33,51 @@ export const FONT_OPTIONS: FontOption[] = [
   { name: 'Readex Pro', rtl: true },
 ];
 
-const STORAGE_KEY = 'greeting-cards';
+export async function saveCard(card: CardData): Promise<boolean> {
+  const { error } = await supabase.from('greeting_cards').insert({
+    card_id: card.cardId,
+    image: card.image,
+    image_width: card.imageWidth ?? 0,
+    image_height: card.imageHeight ?? 0,
+    name_position_x: card.namePosition.x,
+    name_position_y: card.namePosition.y,
+    font_family: card.fontFamily,
+    font_size: card.fontSize,
+    text_color: card.textColor,
+    rtl: card.rtl,
+    custom_font_data: card.customFontData ?? null,
+    custom_font_name: card.customFontName ?? null,
+  });
 
-function getAllCards(): Record<string, CardData> {
-  if (typeof window === 'undefined') return {};
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
-  } catch {
-    return {};
+  if (error) {
+    console.error('Failed to save card:', error);
+    return false;
   }
+  return true;
 }
 
-export function saveCard(card: CardData): void {
-  const cards = getAllCards();
-  cards[card.cardId] = card;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
-}
+export async function loadCard(cardId: string): Promise<CardData | null> {
+  const { data, error } = await supabase
+    .from('greeting_cards')
+    .select('*')
+    .eq('card_id', cardId)
+    .maybeSingle();
 
-export function loadCard(cardId: string): CardData | null {
-  const cards = getAllCards();
-  return cards[cardId] ?? null;
+  if (error || !data) return null;
+
+  return {
+    cardId: data.card_id,
+    image: data.image,
+    imageWidth: data.image_width,
+    imageHeight: data.image_height,
+    namePosition: { x: data.name_position_x, y: data.name_position_y },
+    fontFamily: data.font_family,
+    fontSize: data.font_size,
+    textColor: data.text_color,
+    rtl: data.rtl,
+    customFontData: data.custom_font_data ?? undefined,
+    customFontName: data.custom_font_name ?? undefined,
+  };
 }
 
 export async function registerCustomFont(name: string, dataUrl: string): Promise<void> {

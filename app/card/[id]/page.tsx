@@ -27,18 +27,18 @@ export default function CardPage() {
   const downloadRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const data = loadCard(cardId);
-    if (data) {
-      if (data.customFontData && data.customFontName) {
-        registerCustomFont(data.customFontName, data.customFontData).then(() => {
-          setCard(data);
-        });
-      } else {
+    async function fetchCard() {
+      const data = await loadCard(cardId);
+      if (data) {
+        if (data.customFontData && data.customFontName) {
+          await registerCustomFont(data.customFontName, data.customFontData);
+        }
         setCard(data);
+      } else {
+        setNotFound(true);
       }
-    } else {
-      setNotFound(true);
     }
+    fetchCard();
   }, [cardId]);
 
   function handleGenerate() {
